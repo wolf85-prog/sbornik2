@@ -12,12 +12,14 @@ const ABOUT = "/about" as Href
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
 
-export default async function Index() {
-  const [db, setDb] = useState(SQLite.openDatabaseAsync('example.db'));
+export default function Index() {
+  
   const [isLoading, setIsLoading] = useState(true);
   const [names, setNames] = useState([]);
   const [currentName, setCurrentName] = useState(undefined);
 
+  //const [db, setDb] = useState(SQLite.openDatabaseAsync('example.db'));
+  
   //const db = await SQLite.openDatabaseAsync('databaseName');
 
   // `execAsync()` is useful for bulk queries when you want to execute altogether.
@@ -53,13 +55,13 @@ export default async function Index() {
   // }
 
 
-  // if (isLoading) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text>Loading names...</Text>
-  //     </View>
-  //   );
-  // }
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Loading names...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -87,5 +89,8 @@ const styles = StyleSheet.create({
   footerContainer: {
     flex: 1 / 3,
     alignItems: 'center',
+  },
+  text: {
+    color: '#fff',
   },
 });
