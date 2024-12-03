@@ -27,39 +27,51 @@ export default function Index() {
   useEffect(() => {
 
     const getData = async () => {
+      
+      await (await db).withTransactionAsync(async () => {
+      
+        await (await db).getFirstAsync('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)')
+        //const result = await (await db).getFirstAsync('SELECT COUNT(*) FROM names');
+        // console.log('Count:', result.rows[0]['COUNT(*)']);
+      });
 
-      // await (await db).withTransactionAsync(async () => {
-      // // const result = await (await db).getFirstAsync('SELECT COUNT(*) FROM USERS');
-      // // console.log('Count:', result.rows[0]['COUNT(*)']);
-      //   await (await db).getFirstAsync('CREATE TABLE IF NOT EXISTS names (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)')
-      // });
+      await (await db).withTransactionAsync(async () => {
+        const result = await (await db).runAsync('INSERT INTO names (name) VALUES (?)', 'aaa');
+        setCurrentName("result: ", result.lastInsertRowId)
+      });
 
-      await db.execAsync(`
-        PRAGMA journal_mode = WAL;
-        CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
-        INSERT INTO test (value, intValue) VALUES ('test1', 123);
-        INSERT INTO test (value, intValue) VALUES ('test2', 456);
-        INSERT INTO test (value, intValue) VALUES ('test3', 789);
-        `);
+      await (await db).withTransactionAsync(async () => {
+        const firstRow = await db.getFirstAsync('SELECT * FROM names');
+      });
+
+      // await db.execAsync(`
+      //   PRAGMA journal_mode = WAL;
+      //   CREATE TABLE IF NOT EXISTS test (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
+      //   INSERT INTO test (value, intValue) VALUES ('test1', 123);
+      //   INSERT INTO test (value, intValue) VALUES ('test2', 456);
+      //   INSERT INTO test (value, intValue) VALUES ('test3', 789);
+      //   `);
 
       // `runAsync()` is useful when you want to execute some write operations.
-      const result = await db.runAsync('INSERT INTO test (value, intValue) VALUES (?, ?)', 'aaa', 100);
-      console.log(result.lastInsertRowId, result.changes);
-      await db.runAsync('UPDATE test SET intValue = ? WHERE value = ?', 999, 'aaa'); // Binding unnamed parameters from variadic arguments
-      await db.runAsync('UPDATE test SET intValue = ? WHERE value = ?', [999, 'aaa']); // Binding unnamed parameters from array
-      await db.runAsync('DELETE FROM test WHERE value = $value', { $value: 'aaa' }); // Binding named parameters from object
+      //const result = await db.runAsync('INSERT INTO names (name) VALUES (?)', 'aaa');
+      //setCurrentName("result: ")
+
+      //console.log(result.lastInsertRowId, result.changes);
+      // await db.runAsync('UPDATE test SET intValue = ? WHERE value = ?', 999, 'aaa'); // Binding unnamed parameters from variadic arguments
+      // await db.runAsync('UPDATE test SET intValue = ? WHERE value = ?', [999, 'aaa']); // Binding unnamed parameters from array
+      // await db.runAsync('DELETE FROM test WHERE value = $value', { $value: 'aaa' }); // Binding named parameters from object
 
       // `getFirstAsync()` is useful when you want to get a single row from the database.
-      const firstRow = await db.getFirstAsync('SELECT * FROM test');
-      console.log(firstRow.id, firstRow.value, firstRow.intValue);
+      // const firstRow = await db.getFirstAsync('SELECT * FROM test');
+      // console.log("db: ", firstRow.id, firstRow.value, firstRow.intValue);
 
-      setCurrentName(firstRow.value)
+      //setCurrentName("db: ")
     };
   
     getData();
 
     setIsLoading(false);
-  }, [db]);
+  }, []);
 
 
   if (isLoading) {
