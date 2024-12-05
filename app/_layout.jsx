@@ -30,7 +30,7 @@ export default function RootLayout() {
                 drawerLabel: 'Home',
                 title: 'Home',
                 drawerIcon: ({size, color})=>(
-                    <Ionicons name={'md-home'} size={size} color={color}/>
+                    <Ionicons name="home-filled" size={size} color={color} />
                 )
 
             }}
@@ -41,7 +41,7 @@ export default function RootLayout() {
                 drawerLabel: 'About',
                 title: 'About',
                 drawerIcon: ({size, color})=>(
-                    <Ionicons name='ios-information-circle' size={size} color={color} />
+                    <Ionicons name="information" size={32} color="green" />
                 )
 
             }}

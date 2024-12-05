@@ -18,9 +18,9 @@ export default function CustomDrawerContent(props:any) {
         style={{flex: 1}}
     >
       <DrawerContentScrollView {...props} scrollEnabled={false}>
-        <View style={{padding: 20}}>
-            <Image style={{height: 35}} resizeMode='contain' source={require('../assets/images/logo.png')} />
-        </View>
+        {/* <View style={{padding: 20}}>
+            <Image style={{height: 35}} resizeMode='contain' source={require('../assets/images/re')} />
+        </View> */}
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
 
